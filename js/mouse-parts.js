@@ -100,6 +100,10 @@
       return this.rig.frames[kind]?.length || 0;
     }
 
+    clearTintCache() {
+      tintCache.clear();
+    }
+
     drawPart(context, partId, mode, colors) {
       const part = this.data.parts[partId];
       if (!part) return;

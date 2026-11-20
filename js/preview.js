@@ -20,6 +20,7 @@
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const BASE_PREVIEW_WIDTH = 206;
   const BASE_PREVIEW_HEIGHT = 154;
+  let updateQueued = false;
 
   mouseTypeSelect.value = 'plain';
   shamanLevelSelect.value = '0';
@@ -159,6 +160,16 @@
     status.textContent = `${appearance} · ${rendererSelect.value.toUpperCase()} renderer · ${layers} layered part images.`;
   }
 
+  function scheduleUpdate() {
+    if (updateQueued) return;
+    updateQueued = true;
+    mouse.clearTintCache();
+    requestAnimationFrame(() => {
+      updateQueued = false;
+      update();
+    });
+  }
+
   let previous = 0;
   let accumulated = 0;
   function animate(now) {
@@ -178,8 +189,8 @@
     requestAnimationFrame(animate);
   }
 
-  furPicker.addEventListener('input', update);
-  accentPicker.addEventListener('input', update);
+  furPicker.addEventListener('input', scheduleUpdate);
+  accentPicker.addEventListener('input', scheduleUpdate);
   zoomSlider.addEventListener('input', updateZoom);
   mouseTypeSelect.addEventListener('change', () => { update(); updateStatus(); });
   shamanLevelSelect.addEventListener('change', () => { update(); updateStatus(); });
