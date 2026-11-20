@@ -20,6 +20,8 @@
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const BASE_PREVIEW_WIDTH = 206;
   const BASE_PREVIEW_HEIGHT = 154;
+  const MOUSE_PIVOT_X = `${(rig.pivotX / rig.width) * 100}%`;
+  const MOUSE_PIVOT_Y = `${(rig.pivotY / rig.height) * 100}%`;
   let updateQueued = false;
 
   mouseTypeSelect.value = 'plain';
@@ -73,12 +75,14 @@
     const zoom = Number(zoomSlider.value) / 100;
     zoomValue.value = `${zoomSlider.value}%`;
     for (const [kind, canvas] of Object.entries(stages)) {
-      const width = `${BASE_PREVIEW_WIDTH * zoom}px`;
-      const height = `${BASE_PREVIEW_HEIGHT * zoom}px`;
-      canvas.style.width = width;
-      canvas.style.height = height;
-      svgStages[kind].style.width = width;
-      svgStages[kind].style.height = height;
+      canvas.style.width = `${BASE_PREVIEW_WIDTH}px`;
+      canvas.style.height = `${BASE_PREVIEW_HEIGHT}px`;
+      canvas.style.transformOrigin = `${MOUSE_PIVOT_X} ${MOUSE_PIVOT_Y}`;
+      canvas.style.transform = `scale(${zoom})`;
+      svgStages[kind].style.width = `${BASE_PREVIEW_WIDTH}px`;
+      svgStages[kind].style.height = `${BASE_PREVIEW_HEIGHT}px`;
+      svgStages[kind].style.transformOrigin = `${MOUSE_PIVOT_X} ${MOUSE_PIVOT_Y}`;
+      svgStages[kind].style.transform = `scale(${zoom})`;
     }
   }
 
