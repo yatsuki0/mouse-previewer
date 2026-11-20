@@ -1,7 +1,19 @@
-﻿# Transformice mouse preview
+﻿# Mouse Previewer
 
-Upload the contents of this archive to any static web host and open `preview.html`.
+A standalone Transformice mouse previewer with animated Canvas and SVG renderers.
 
-For local testing, run `python -m http.server 8000 -d demo` from the project root and open `http://localhost:8000/preview.html`.
+## Features
 
-The preview supports Canvas (raster parts) and SVG (vector parts) rendering, plus preview zoom. No server-side code or build step is required.
+- Plain and Shaman mouse previews
+- Idle and running animations
+- Canvas raster rendering
+- SVG vector rendering
+- Live fur and Shaman color controls
+- Animated Divine Shaman wings
+- Preview size control
+
+## GitHub Pages
+
+This repository is ready to publish with GitHub Pages. In the repository on GitHub, open **Settings → Pages**, choose **Deploy from a branch**, select the `main` branch and the `/ (root)` folder, then click **Save**.
+
+GitHub will provide the public Pages URL after deployment.

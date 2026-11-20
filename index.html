@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transformice default mouse · asset preview</title><link rel="stylesheet" href="styles.css">
+</head>
+<body><main class="app preview-page">
+  <header class="heading"><div><p class="eyebrow">Source asset inspection</p><h1>Player mouse preview</h1></div></header>
+  <p class="preview-caption">Plain player mouse and shaman mouse are separate source builds. Both idle and run poses are composed live from the original 8× body-part exports, one SWF layer at a time, using the original rig matrices.</p>
+   <div class="asset-controls">
+    <section class="control-group">
+      <p class="control-group-label">Renderer parameters</p>
+      <div class="asset-controls-row">
+        <label class="mode-control">Renderer
+          <select id="renderer-type">
+            <option value="canvas">Canvas · raster parts</option>
+            <option value="svg">SVG · vector parts</option>
+          </select>
+        </label>
+        <label class="zoom-control">Mouse size
+          <input id="preview-zoom" type="range" min="50" max="200" step="10" value="100">
+          <output id="preview-zoom-value" for="preview-zoom">100%</output>
+        </label>
+      </div>
+    </section>
+    <section class="control-group">
+      <p class="control-group-label">Mouse parameters</p>
+      <div class="asset-controls-row">
+        <label class="mode-control">Mouse
+          <select id="mouse-type">
+            <option value="plain">Plain mouse</option>
+            <option value="shaman">Shaman mouse</option>
+          </select>
+        </label>
+        <label class="mode-control" id="shaman-level-control" hidden>Shaman level
+          <select id="shaman-level">
+            <option value="0">Normal Mode</option>
+            <option value="1">Hard Mode</option>
+            <option value="2">Divine Mode · wings</option>
+          </select>
+        </label>
+        <label class="color-control">Fur <input id="fur-color" type="color" value="#78583a"></label>
+        <label class="color-control" id="accent-control" hidden>Shaman color <input id="accent-color" type="color" value="#95d5b6"></label>
+      </div>
+    </section>
+   </div>
+  <section class="preview-grid">
+    <article class="preview-card"><h2>Idle · 34 frames</h2><div class="preview-stage"><canvas id="idle-canvas" class="character-canvas" role="img" aria-label="Player mouse idle animation"></canvas></div></article>
+    <article class="preview-card"><h2>Run · 12 frames</h2><div class="preview-stage"><canvas id="run-canvas" class="character-canvas" role="img" aria-label="Player mouse running animation"></canvas></div></article>
+  </section>
+  <p id="status" class="preview-caption">Loading local part PNGs…</p>
+ </main><script src="js/mouse-rig-data.js?v=10"></script><script src="js/mouse-parts-data.js?v=10"></script><script src="js/mouse-parts.js?v=10"></script><script src="js/preview.js?v=10"></script></body></html>
