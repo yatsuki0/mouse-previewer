@@ -44,6 +44,8 @@ kbd { border:1px solid #53677d; border-radius:4px; background:#192638; color:#ff
 .mode-toggle input { accent-color:#69c8c9; width:16px; height:16px; }
 .color-control { display:inline-flex; align-items:center; gap:8px; color:#c5d5e3; font-size:12px; }
 .color-control input { width:38px; height:28px; padding:2px; border:1px solid #40556c; border-radius:5px; background:#182437; }
+.ghost-button { border:1px solid #40556c; border-radius:5px; padding:6px 10px; background:#182437; color:#c5d5e3; font:inherit; font-size:12px; cursor:pointer; }
+.ghost-button:hover { border-color:#69c8c9; color:#eaf1f7; }
 .color-control:has(input:disabled) { opacity:.45; }
 .character-inline, .character-canvas { display:block; width:206px; height:154px; overflow:visible; }
 .character-canvas { image-rendering:auto; }

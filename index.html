@@ -1,8 +1,8 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Transformice default mouse · asset preview</title><link rel="stylesheet" href="styles.css">
+  <title>Transformice default mouse · asset preview</title><link rel="stylesheet" href="styles.css?v=22">
 </head>
 <body><main class="app preview-page">
   <header class="heading"><div><p class="eyebrow">Source asset inspection</p><h1>Player mouse preview</h1></div></header>
@@ -21,6 +21,10 @@
           <input id="preview-zoom" type="range" min="50" max="200" step="10" value="100">
           <output id="preview-zoom-value" for="preview-zoom">100%</output>
         </label>
+        <label class="color-control">Backdrop
+          <input id="backdrop-color" type="color" value="#ff00ff">
+        </label>
+        <button type="button" id="backdrop-reset" class="ghost-button">Stage</button>
       </div>
     </section>
     <section class="control-group">
@@ -49,4 +53,4 @@
     <article class="preview-card"><h2>Run · 12 frames</h2><div class="preview-stage"><canvas id="run-canvas" class="character-canvas" role="img" aria-label="Player mouse running animation"></canvas></div></article>
   </section>
   <p id="status" class="preview-caption">Loading local part PNGs…</p>
- </main><script src="js/mouse-rig-data.js?v=10"></script><script src="js/mouse-parts-data.js?v=10"></script><script src="js/mouse-parts.js?v=10"></script><script src="js/preview.js?v=10"></script></body></html>
+ </main><script src="js/mouse-rig-data.js?v=22"></script><script src="js/mouse-parts-data.js?v=22"></script><script src="js/mouse-parts.js?v=22"></script><script src="js/preview.js?v=22"></script></body></html>

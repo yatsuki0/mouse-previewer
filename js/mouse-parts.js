@@ -46,8 +46,8 @@
     const [r, g, b] = multipliers.map(multiplier =>
       Math.min(255, Math.round(multiplier * 255))
     );
+    // Match the SVG filter: source * (color / 128).
     try {
-      // This exactly matches the SVG filter: source * (color / 128).
       const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
       for (let index = 0; index < pixels.data.length; index += 4) {
         pixels.data[index] = Math.min(255, Math.round(pixels.data[index] * multipliers[0]));
@@ -74,6 +74,7 @@
       this.data = data;
       this.ready = false;
       this.loading = null;
+      this.showStrokes = true;
     }
 
     load() {
@@ -104,7 +105,7 @@
       tintCache.clear();
     }
 
-    drawPart(context, partId, mode, colors) {
+    drawPart(context, partId, mode, colors, outputScale = 1) {
       const part = this.data.parts[partId];
       if (!part) return;
       for (const layer of part.layers) {
@@ -119,21 +120,56 @@
         context.transform(...parseMatrix(layer.transform));
         context.translate(-layer.offsetX, -layer.offsetY);
         context.drawImage(source, 0, 0, layer.width, layer.height);
+        if (this.showStrokes) this.drawStrokes(context, layer, outputScale);
         context.restore();
       }
+    }
+
+    // The raster has no hairline width that survives a zoom, because Flash
+    // clamps strokes to one device pixel at render time. Draw the original
+    // stroke paths as vectors instead, keeping that same one-pixel floor.
+    drawStrokes(context, layer, outputScale = 1) {
+      const strokes = layer.strokes;
+      if (!strokes?.length) return;
+      // Stroke coordinates are layer-local, the raster was just drawn at
+      // (-offsetX, -offsetY), so step back to the layer origin.
+      context.save();
+      context.translate(layer.offsetX, layer.offsetY);
+      for (const stroke of strokes) {
+        let path = stroke.path;
+        if (!path) {
+          path = new Path2D(stroke.d);
+          stroke.path = path;
+        }
+        context.save();
+        if (stroke.matrix) context.transform(...stroke.matrix);
+        const matrix = context.getTransform();
+        const unitsPerPixel = Math.hypot(matrix.a, matrix.b);
+        context.lineWidth = Math.max(stroke.width, unitsPerPixel > 0 ? outputScale / unitsPerPixel : stroke.width);
+        context.strokeStyle = stroke.color;
+        context.lineCap = stroke.cap || 'butt';
+        context.lineJoin = stroke.join || 'miter';
+        if (stroke.miterLimit != null) context.miterLimit = stroke.miterLimit;
+        context.setLineDash(stroke.dash || []);
+        context.globalAlpha *= stroke.opacity ?? 1;
+        context.stroke(path);
+        context.restore();
+      }
+      context.restore();
     }
 
     draw(context, kind, frame, options = {}) {
       if (!this.ready) return;
       const {
         x = 0, y = 0, scale = 1, facing = 1,
-        mode = 'plain', level = 0, colors = DEFAULT_COLORS,
+        mode = 'plain', level = 0, colors = DEFAULT_COLORS, outputScale = 1,
       } = options;
       const frames = this.rig.frames[kind];
       if (!frames?.length) return;
       const pose = frames[((frame | 0) % frames.length + frames.length) % frames.length];
 
       context.save();
+      context.imageSmoothingQuality = 'high';
       context.translate(x, y);
       context.scale(facing * scale, scale);
       context.translate(this.rig.pivotX, this.rig.pivotY);
@@ -146,12 +182,12 @@
         // SWF alpha comes from the rig frame's color transform; absent means 1.
         context.globalAlpha *= slot.alpha ?? 1;
         context.transform(...parseMatrix(slot.transform));
-        this.drawPart(context, partId, mode, colors);
+        this.drawPart(context, partId, mode, colors, outputScale);
 
         if (mode === 'shaman' && level === this.rig.shamanDivineMode && slot.wingPart) {
           context.save();
           context.transform(...parseMatrix(slot.wingTransform));
-          this.drawPart(context, slot.wingPart, mode, colors);
+          this.drawPart(context, slot.wingPart, mode, colors, outputScale);
           context.restore();
         }
         context.restore();
